@@ -80,7 +80,7 @@ let operatorButton = function(element) {
       numbers = []
       operators = [];
     }
-    if (display.value === '') return;
+    if (display.value === '') return; //Edit here
     if (display.value.includes('-')) negativeCounter = 0; 
     num = Number(display.value);
     formulaField.innerHTML += ' ' + num + ' ' + element.id;
