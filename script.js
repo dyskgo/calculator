@@ -93,35 +93,39 @@ let operatorButton = function(element) {
 //Backspace Button Function 
 let backspaceButton = function() {
     if (display.value !== '') {
-        display.value = display.value.slice(0, -1);
+        display.value = display.value.slice(0, -1);  //Something here
+        if (display.value === '') nextRound = 0;
         return;
     } else {
         if (numbers.length === operators.length && numbers.length > 0) {
             operators.pop();
         } 
-        if (numbers.length > operators.length && numbers.length > 0) {
+        else if (numbers.length > operators.length && numbers.length > 0) {
             numbers.pop();
         }
         let lastIndex = formulaField.innerHTML.lastIndexOf(' ');
         formulaField.innerHTML = formulaField.innerHTML.substring(0, lastIndex);
         nextRound = 0;
+        console.log(numbers);
+        console.log(operators);
         return; 
     }
 }
 
 let equalsButton = function() {
-    if (nextRound === 1 || display.value === '' || display.value === '-') return;
+    if (nextRound === 1 || display.value === '-') return;
+    //|| display.value === ''
+    if (display.value !== '') {
       num = Number(display.value);
       numbers.push(num);
       formulaField.innerHTML += ' ' + num; 
+    }
       solution = equals(numbers, operators);
       if (isNaN(solution)) {
         display.value = 'Error';
         } else {
           display.value = solution;
         }
-      //numbers = [];
-      //operators = []; 
       nextRound++; 
 }
 
