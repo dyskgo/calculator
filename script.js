@@ -33,8 +33,6 @@ let solution;
 let nextRound = 0;
 let negativeCounter = 0
 
-
-
 //Clear Display Function 
 let newCalc = function() {
     if (nextRound === 1) {
@@ -45,6 +43,7 @@ let newCalc = function() {
         nextRound--; 
       }
 }
+
 //Number Button Function
 let numberButton = function(element) {
       newCalc();
@@ -83,11 +82,11 @@ let operatorButton = function(element) {
     if (display.value === '' && numbers.length === 0) return; //Edit here
     if (display.value.includes('-')) negativeCounter = 0; 
     if (display.value !== '') {
-    num = Number(display.value);
-    formulaField.innerHTML += ' ' + num + ' ' + element.id;
-    numbers.push(num);
+      num = Number(display.value);
+      formulaField.innerHTML += ' ' + num + ' ' + element.id;
+      numbers.push(num);
     } else {
-    formulaField.innerHTML += ' ' + element.id; 
+      formulaField.innerHTML += ' ' + element.id; 
     }
     operator = element.id; 
     operators.push(element.id);
@@ -118,19 +117,18 @@ let backspaceButton = function() {
 
 let equalsButton = function() {
     if (nextRound === 1 || display.value === '-') return;
-    //|| display.value === ''
     if (display.value !== '') {
       num = Number(display.value);
       numbers.push(num);
       formulaField.innerHTML += ' ' + num; 
     }
-      solution = equals(numbers, operators);
-      if (isNaN(solution)) {
-        display.value = 'Error';
-        } else {
-          display.value = solution;
-        }
-      nextRound++; 
+    solution = equals(numbers, operators);
+    if (isNaN(solution)) {
+      display.value = 'Error';
+    } else {
+      display.value = solution;
+    }
+    nextRound++; 
 }
 
 let clearButton = function() {
@@ -202,22 +200,30 @@ let equals = function(array1, array2) {
       let index = mathArray.findIndex(exponentSign);
       mathArray.splice(index - 1, 3, operate('^', mathArray[index - 1], mathArray[index + 1]));
   }
-  while (mathArray.indexOf('/') >= 0) {
-    let index = mathArray.findIndex(divideSign);
-    mathArray.splice(index - 1, 3, operate('/', mathArray[index - 1], mathArray[index + 1])); 
+  while (mathArray.indexOf('/') >= 0 || mathArray.indexOf('*') >= 0) {
+    let firstOp = mathArray.find(function(x) {
+      return x === '/' || x === '*'; 
+    });
+    if (firstOp === '/') {
+      let index = mathArray.findIndex(divideSign);
+      mathArray.splice(index - 1, 3, operate('/', mathArray[index - 1], mathArray[index + 1])); 
+    } else if (firstOp === '*') {
+      let index = mathArray.findIndex(multiplySign);
+      mathArray.splice(index - 1, 3, operate('*', mathArray[index - 1], mathArray[index + 1]));
+    }
   }
-  while (mathArray.indexOf('*') >= 0) {
-    let index = mathArray.findIndex(multiplySign);
-    mathArray.splice(index - 1, 3, operate('*', mathArray[index - 1], mathArray[index + 1]));
-  }
-  while (mathArray.indexOf('+') >= 0) {
-    let index = mathArray.findIndex(plusSign); 
-    mathArray.splice(index - 1, 3, operate('+', mathArray[index - 1], mathArray[index + 1]));
+  while (mathArray.indexOf('+') >= 0 || mathArray.indexOf('-') >= 0) {
+    firstOp = mathArray.find(function(x) {
+      return x === '+' || x === '-'; 
+    });
+    if (firstOp === '+') {
+      let index = mathArray.findIndex(plusSign); 
+      mathArray.splice(index - 1, 3, operate('+', mathArray[index - 1], mathArray[index + 1]));
+    } else if (firstOp === '-') {
+      let index = mathArray.findIndex(minusSign);
+      mathArray.splice(index - 1, 3, operate('-', mathArray[index - 1], mathArray[index + 1]));
+    }
   } 
-  while (mathArray.indexOf('-') >= 0) {
-    let index = mathArray.findIndex(minusSign);
-    mathArray.splice(index - 1, 3, operator('-', mathArray[index - 1], mathArray[index + 1]));
-  }
   let finalNum = Number(mathArray[0]);
   return round(finalNum, 8); 
 }
