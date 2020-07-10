@@ -79,7 +79,7 @@ let operatorButton = function(element) {
       numbers = []
       operators = [];
     }
-    if (display.value === '' && numbers.length === 0) return; //Edit here
+    if (display.value === '' && numbers.length === 0 || numbers.length === operators.length && numbers.length > 0) return; 
     if (display.value.includes('-')) negativeCounter = 0; 
     if (display.value !== '') {
       num = Number(display.value);
@@ -96,7 +96,7 @@ let operatorButton = function(element) {
 //Backspace Button Function 
 let backspaceButton = function() {
     if (display.value !== '') {
-        display.value = display.value.slice(0, -1);  //Something here
+        display.value = display.value.slice(0, -1); 
         if (display.value === '') nextRound = 0;
         return;
     } else {
